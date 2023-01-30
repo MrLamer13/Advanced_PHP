@@ -1,0 +1,20 @@
+{
+    "name": "geekbrains/level_two",
+    "autoload": {
+        "psr-4": {
+            "GeekBrains\\LevelTwo\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "MrLamer",
+            "email": "mrlamer@mail.ru"
+        }
+    ],
+    "require": {
+        "fakerphp/faker": "^1.21",
+        "roave/security-advisories": "dev-latest",
+        "ext-pdo": "*",
+        "symfony/polyfill-uuid": "^1.27"
+    }
+}
