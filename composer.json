@@ -1,0 +1,27 @@
+{
+    "name": "geekbrains/level_two",
+    "autoload": {
+        "psr-4": {
+            "GeekBrains\\LevelTwo\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "MrLamer",
+            "email": "mrlamer@mail.ru"
+        }
+    ],
+    "require": {
+        "ext-pdo": "*",
+        "symfony/polyfill-uuid": "^1.27"
+    },
+    "require-dev": {
+        "fakerphp/faker": "^1.21",
+        "roave/security-advisories": "dev-latest",
+        "phpunit/phpunit": "^9.5"
+    },
+    "scripts": {
+        "test": "phpunit tests --testdox --colors",
+        "coverage": "php -dxdebug.mode=coverage vendor/bin/phpunit tests --coverage-html coverage_report --coverage-filter src"
+    }
+}
