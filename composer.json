@@ -21,10 +21,11 @@
         "symfony/polyfill-uuid": "^1.27",
         "psr/container": "^2.0",
         "monolog/monolog": "^3.3",
-        "vlucas/phpdotenv": "^5.5"
+        "vlucas/phpdotenv": "^5.5",
+        "fakerphp/faker": "^1.21",
+        "symfony/console": "^6.2"
     },
     "require-dev": {
-        "fakerphp/faker": "^1.21",
         "roave/security-advisories": "dev-latest",
         "phpunit/phpunit": "^9.5"
     },
