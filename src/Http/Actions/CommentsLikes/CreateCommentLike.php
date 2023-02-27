@@ -52,15 +52,11 @@ class CreateCommentLike implements ActionInterface
 
         $newCommentLikeUuid = UUID::random();
 
-        try {
-            $commentLike = new CommentLike(
-                $newCommentLikeUuid,
-                $comment,
-                $author
-            );
-        } catch (HttpException $exception) {
-            return new ErrorResponse($exception->getMessage());
-        }
+        $commentLike = new CommentLike(
+            $newCommentLikeUuid,
+            $comment,
+            $author
+        );
 
         if ($this->likeExists($commentUuid, $author)) {
             throw new CommentLikeExistException("Лайк уже поставлен");
@@ -71,7 +67,6 @@ class CreateCommentLike implements ActionInterface
         return new SuccessfulResponse([
             'uuid' => (string)$newCommentLikeUuid
         ]);
-
     }
 
     private function likeExists(UUID $commentUuid, User $user): bool

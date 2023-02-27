@@ -8,6 +8,7 @@ use GeekBrains\LevelTwo\Blog\Repositories\UsersRepository\SqliteUsersRepository;
 use GeekBrains\LevelTwo\Blog\UUID;
 use GeekBrains\LevelTwo\Exceptions\CommentLikesNotFoundException;
 use PDO;
+use PDOStatement;
 use Psr\Log\LoggerInterface;
 
 class SqliteCommentsLikesRepository implements CommentsLikesRepositoryInterface
@@ -49,10 +50,10 @@ class SqliteCommentsLikesRepository implements CommentsLikesRepositoryInterface
         return $this->getCommentLikes($statement, $commentUuid);
     }
 
-    private function getCommentLikes(\PDOStatement $statement, string $commentUuid): array
+    private function getCommentLikes(PDOStatement $statement, string $commentUuid): array
     {
         $result = $statement->fetchAll(PDO::FETCH_ASSOC);
-        if ($result === false) {
+        if ($result === []) {
             $this->logger->warning("Лайки комментария не найдены: $commentUuid");
             throw new CommentLikesNotFoundException(
                 "Лайки комментария не найдены: $commentUuid"

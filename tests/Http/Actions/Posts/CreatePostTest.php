@@ -80,6 +80,29 @@ class CreatePostTest extends TestCase
         $response->send();
     }
 
+    /**
+     * @runInSeparateProcess
+     * @preserveGlobalState disabled
+     */
+    public function testItReturnsThrowIfInvalidAuthor(): void
+    {
+        $postsRepository = $this->postsRepository([]);
+        $usersRepository = $this->usersRepository([]);
+
+        $identification = new JsonBodyUsernameAuthentication($usersRepository);
+
+        $request = new Request([], [],
+            '{"username": "vasia", "title": "Title", "text": "Post text"}');
+
+        $action = new CreatePost($postsRepository, $identification, new DummyLogger());
+        $response = $action->handle($request);
+
+        $this->assertInstanceOf(ErrorResponse::class, $response);
+        $this->expectOutputString('{"success":false,"reason":"Не найден пользователь"}');
+        $response->send();
+
+    }
+
     private function postsRepository(array $posts): PostsRepositoryInterface
     {
         return new class($posts) implements PostsRepositoryInterface {
@@ -97,6 +120,10 @@ class CreatePostTest extends TestCase
             public function get(UUID $uuid): Post
             {
                 throw new PostNotFoundException('Не найдено');
+            }
+
+            public function delete(UUID $uuid): void
+            {
             }
         };
     }
@@ -121,7 +148,7 @@ class CreatePostTest extends TestCase
                         return $user;
                     }
                 }
-                throw new UserNotFoundException("Не найдено");
+                throw new UserNotFoundException("Не найден пользователь");
             }
 
             public function getByUsername(string $username): User
@@ -131,7 +158,7 @@ class CreatePostTest extends TestCase
                         return $user;
                     }
                 }
-                throw new UserNotFoundException("Не найдено");
+                throw new UserNotFoundException("Не найден пользователь");
             }
         };
     }

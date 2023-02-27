@@ -8,6 +8,7 @@ use GeekBrains\LevelTwo\Blog\Repositories\UsersRepository\SqliteUsersRepository;
 use GeekBrains\LevelTwo\Blog\UUID;
 use GeekBrains\LevelTwo\Exceptions\PostLikesNotFoundException;
 use PDO;
+use PDOStatement;
 use Psr\Log\LoggerInterface;
 
 class SqlitePostsLikesRepository implements PostsLikesRepositoryInterface
@@ -49,10 +50,10 @@ class SqlitePostsLikesRepository implements PostsLikesRepositoryInterface
         return $this->getPostLikes($statement, $postUuid);
     }
 
-    private function getPostLikes(\PDOStatement $statement, string $postUuid): array
+    private function getPostLikes(PDOStatement $statement, string $postUuid): array
     {
         $result = $statement->fetchAll(PDO::FETCH_ASSOC);
-        if ($result === false) {
+        if ($result === []) {
             $this->logger->warning("Лайки поста не найдены: $postUuid");
             throw new PostLikesNotFoundException(
                 "Лайки поста не найдены: $postUuid"
@@ -63,12 +64,12 @@ class SqlitePostsLikesRepository implements PostsLikesRepositoryInterface
         $userRepository = new SqliteUsersRepository($this->connection, $this->logger);
         $postLikes = [];
 
-        foreach ($result as $postlike) {
-            $post = $postRepository->get(new UUID($postlike['post_uuid']));
-            $user = $userRepository->get(new UUID($postlike['author_uuid']));
+        foreach ($result as $postLike) {
+            $post = $postRepository->get(new UUID($postLike['post_uuid']));
+            $user = $userRepository->get(new UUID($postLike['author_uuid']));
 
             $postLikes[] = new PostLike(
-                new UUID($postlike['uuid']),
+                new UUID($postLike['uuid']),
                 $post,
                 $user
             );

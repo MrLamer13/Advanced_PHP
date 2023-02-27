@@ -5,6 +5,7 @@ namespace GeekBrains\LevelTwo\Http\Actions\Posts;
 use GeekBrains\LevelTwo\Blog\Repositories\PostsRepository\PostsRepositoryInterface;
 use GeekBrains\LevelTwo\Blog\UUID;
 use GeekBrains\LevelTwo\Exceptions\HttpException;
+use GeekBrains\LevelTwo\Exceptions\InvalidArgumentException;
 use GeekBrains\LevelTwo\Exceptions\PostNotFoundException;
 use GeekBrains\LevelTwo\Http\Actions\ActionInterface;
 use GeekBrains\LevelTwo\Http\ErrorResponse;
@@ -31,7 +32,7 @@ class DeletePost implements ActionInterface
         try {
             $post = $this->postsRepository->get(new UUID($postUuid));
             $this->postsRepository->delete(new UUID($postUuid));
-        } catch (PostNotFoundException $exception) {
+        } catch (PostNotFoundException|InvalidArgumentException $exception) {
             return new ErrorResponse($exception->getMessage());
         }
 

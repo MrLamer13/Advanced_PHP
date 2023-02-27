@@ -52,15 +52,11 @@ class CreatePostLike implements ActionInterface
 
         $newPostLikeUuid = UUID::random();
 
-        try {
-            $postLike = new PostLike(
-                $newPostLikeUuid,
-                $post,
-                $author
-            );
-        } catch (HttpException $exception) {
-            return new ErrorResponse($exception->getMessage());
-        }
+        $postLike = new PostLike(
+            $newPostLikeUuid,
+            $post,
+            $author
+        );
 
         if ($this->likeExists($postUuid, $author)) {
             throw new PostLikeExistException("Лайк уже поставлен");
@@ -71,7 +67,6 @@ class CreatePostLike implements ActionInterface
         return new SuccessfulResponse([
             'uuid' => (string)$newPostLikeUuid
         ]);
-
     }
 
     private function likeExists(UUID $postUuid, User $user): bool
@@ -89,6 +84,5 @@ class CreatePostLike implements ActionInterface
         }
 
         return false;
-
     }
 }

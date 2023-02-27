@@ -138,6 +138,11 @@ class FindByUuidTest extends TestCase
                 }
                 throw new PostNotFoundException("Не найдено");
             }
+
+            public function delete(UUID $uuid): void
+            {
+
+            }
         };
     }
 
